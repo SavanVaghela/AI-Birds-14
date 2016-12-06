@@ -1,0 +1,15 @@
+Select a.ctry,
+    case 
+        when a.type='C0' or a.type='c1' 
+            then 'CZ'
+        else
+            a.type
+     end,
+     case 
+        when a.type='C0' or a.type='C1' 
+            then select sum(b.amount) from payment as b
+                  where b.ctry=a.ctry and b.type in ('C0', 'C1')
+        else
+            a.amount
+     end
+from payment as a
