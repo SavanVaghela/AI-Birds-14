@@ -1,0 +1,119 @@
+package frontend;
+import java.awt.Color;import java.awt.EventQueue;import java.awt.Font;import java.awt.KeyboardFocusManager;
+import javax.swing.JFrame;import javax.swing.JButton;
+import java.awt.event.ActionListener;import java.awt.event.ActionEvent;import java.awt.font.TextAttribute;import java.text.SimpleDateFormat;import java.util.Calendar;import java.util.HashMap;import java.util.Map;
+import javax.swing.BorderFactory;import javax.swing.JComboBox;import javax.swing.JOptionPane;import javax.swing.JScrollPane;import javax.swing.JSeparator;import javax.swing.JTextArea;import javax.swing.JTextField;import javax.swing.JLabel;import javax.swing.SwingConstants;import javax.swing.UIManager;import javax.swing.UnsupportedLookAndFeelException;
+public class MTMessageGenerator { private static JFrame  frame;
+ private JLabel  labelCountry,  labelDRN,  labelCurrency,  labelAmount,  labelSettlementAccount,  labelSettlementCollectionAccount, labelYear, labelMonth, labelDay;
+ private static JTextField textDRN, textCurrency, textAmount, textSettlementAccount, textSettlementCollectionAccount;
+ private static JComboBox<String> comboCountry, comboYear, comboMonth, comboDay;
+ private static JTextArea textOutput;
+ private JButton  btnSubmit, btnClear, btnExit;
+ private static int  labelX = 30, labelY = 30, fieldX = 150, fieldY = getLabelY();
+ private final static String[] arrayCountry = {  "HBUS",  "HBEU",  "HBAP",  "IDAP",  "INAP",  "CNAP",  "HRFB"  }; private final static String[] arrayCountryMapping = {  "MRMDUS30XXX",  "MIDLGB20XXX",  "HSBCHKH0HKH",  "HSBCIDJ0XXX",  "HSBCINB0XXX",  "HSBCCNS0XXX",  "MIDLGB30XXX"  };
+ public static void main(String[] args)  {  EventQueue.invokeLater(new Runnable()   {   public void run()    {    new MTMessageGenerator();   }  }); }
+ public MTMessageGenerator() {  TestRun(); }
+ private void TestRun()  {  init();
+  // System.out.println("Creating Label and Input Fields");  setLabelCountry(new JLabel("Country:", SwingConstants.RIGHT));  getLabelCountry().setBounds(getLabelX(), 1 * getLabelY(), 100, 20);  getFrame().getContentPane().add(getLabelCountry());
+  setLabelDRN(new JLabel("DRN:", SwingConstants.RIGHT));  getLabelDRN().setBounds(getLabelX(), 2 * getLabelY(), 100, 20);  getFrame().getContentPane().add(getLabelDRN());
+  setLabelCurrency(new JLabel("Currency:", SwingConstants.RIGHT));  getLabelCurrency().setBounds(getLabelX(), 3 * getLabelY(), 100, 20);  getFrame().getContentPane().add(getLabelCurrency());
+  setLabelAmount(new JLabel("Amount:", SwingConstants.RIGHT));  getLabelAmount().setBounds(getLabelX(), 4 * getLabelY(), 100, 20);  getFrame().getContentPane().add(getLabelAmount());
+  setLabelSettlementAccount(new JLabel("Settle Account:", SwingConstants.RIGHT));  getLabelSettlementAccount().setBounds(getLabelX(), 5 * getLabelY(), 100, 20);  getFrame().getContentPane().add(getLabelSettlementAccount());
+  setLabelSettlementCollectionAccount(new JLabel("S.C. Account:", SwingConstants.RIGHT));  getLabelSettlementCollectionAccount().setBounds(getLabelX(), 6 * getLabelY(), 100, 20);  getFrame().getContentPane().add(getLabelSettlementCollectionAccount());
+  setLabelYear(new JLabel("Year"));  getLabelYear().setBounds(2 * getLabelX(), 7 * getLabelY(), 100, 20);  getFrame().getContentPane().add(getLabelYear());
+  setLabelMonth(new JLabel("Month"));  getLabelMonth().setBounds(5 * getLabelX() , 7 * getLabelY(), 100, 20);  getFrame().getContentPane().add(getLabelMonth());
+  setLabelDay(new JLabel("Day"));  getLabelDay().setBounds(8 * getLabelX(), 7 * getLabelY(), 100, 20);  getFrame().getContentPane().add(getLabelDay());
+
+  setTextDRN(new JTextField());  getTextDRN().setText("DRN");  getTextDRN().setBounds(getFieldX(), 2 * getFieldY(), 150, 20);  getFrame().getContentPane().add(getTextDRN());  getTextDRN().setColumns(10);
+  setTextCurrency(new JTextField());  getTextCurrency().setBounds(getFieldX(), 3 * getFieldY(), 150, 20);  getFrame().getContentPane().add(getTextCurrency());  getTextCurrency().setColumns(10);
+  setTextAmount(new JTextField());  getTextAmount().setBounds(getFieldX(), 4 * getFieldY(), 150, 20);  getFrame().getContentPane().add(getTextAmount());  getTextAmount().setColumns(10);
+  setTextSettlementAccount(new JTextField());  getTextSettlementAccount().setBounds(getFieldX(), 5 * getFieldY(), 150, 20);  getFrame().getContentPane().add(getTextSettlementAccount());  getTextSettlementAccount().setColumns(10);
+  setTextSettlementCollectionAccount(new JTextField());  getTextSettlementCollectionAccount().setBounds(getFieldX(), 6 * getFieldY(), 150, 20);  getFrame().getContentPane().add(getTextSettlementCollectionAccount());  getTextSettlementCollectionAccount().setColumns(10);
+
+  setComboCountry(new JComboBox<String>());  getComboCountry().addItem(" -- Select -- ");  for(int i = 0; i < getArraycountry().length; i++)   getComboCountry().addItem(getArraycountry()[i]);  getComboCountry().setBounds(getFieldX(), 1 * getFieldY(), 150, 20);  getFrame().getContentPane().add(getComboCountry());
+  setComboYear(new JComboBox<String>());  for(int i = 0; i < 5; i++)   getComboYear().addItem(Integer.toString(2016 + i));  getComboYear().setBounds(2 * getLabelX(), 31 * getLabelY() / 4, 50, 20);  getComboYear().setSelectedIndex(Integer.parseInt(new SimpleDateFormat("yy").    format(Calendar.getInstance().getTime())) - 16);  getFrame().getContentPane().add(getComboYear());
+  setComboMonth(new JComboBox<String>());  for(int i = 0; i < 12; i++)   getComboMonth().addItem(Integer.toString(1 + i));  getComboMonth().setBounds(5 * getLabelX(), 31 * getLabelY() / 4, 50, 20);  getComboMonth().setSelectedIndex(Integer.parseInt(new SimpleDateFormat("MM").    format(Calendar.getInstance().getTime())) - 1);  getFrame().getContentPane().add(getComboMonth());
+  //  System.out.println(Integer.parseInt(new SimpleDateFormat("dd").format(Calendar.getInstance().getTime())) - 1);  setComboDay(new JComboBox<String>());  for(int i = 0; i < 31; i++)   getComboDay().addItem(Integer.toString(1 + i));  getComboDay().setBounds(8 * getLabelX(), 31 * getLabelY() / 4, 50, 20);  getComboDay().setSelectedIndex(Integer.parseInt(new SimpleDateFormat("dd").    format(Calendar.getInstance().getTime())) - 1);  getFrame().getContentPane().add(getComboDay());
+
+  setTextOutput(new JTextArea(5, 20));  getTextOutput().setBounds(24 * getFieldX() / 10, 1 * getFieldY(), 300, 400);  getFrame().getContentPane().add(getTextOutput());  getTextOutput().setRows(20);  getTextOutput().setColumns(20);  getTextOutput().setBorder(BorderFactory.createLineBorder(Color.BLACK));  getTextOutput().setBackground(Color.BLACK);  getTextOutput().setForeground(Color.GREEN);  final JScrollPane sp = new JScrollPane(getTextOutput());  sp.setBounds(getTextOutput().getBounds());  getFrame().getContentPane().add(sp);  getTextOutput().setFocusTraversalKeys(KeyboardFocusManager.FORWARD_TRAVERSAL_KEYS, null);  getTextOutput().setFocusTraversalKeys(KeyboardFocusManager.BACKWARD_TRAVERSAL_KEYS, null);  getTextOutput().setFocusTraversalKeys(KeyboardFocusManager.DOWN_CYCLE_TRAVERSAL_KEYS, null);  getTextOutput().setFocusTraversalKeys(KeyboardFocusManager.UP_CYCLE_TRAVERSAL_KEYS, null);  sp.setVisible(false);
+  //  JScrollPane scrollPane = new JScrollPane(getTextOutput());  //  getFrame().getContentPane().add(new JScrollPane(new JTextArea(50, 50)));
+  final JSeparator separator = new JSeparator(JSeparator.VERTICAL);  separator.setBounds(325, 20, 100, 400);  getFrame().add(separator);  separator.setVisible(false);
+  // System.out.println("Creating Buttons");  setBtnSubmit(new JButton("Add Message"));  getBtnSubmit().setBounds(50, 10 * getLabelY(), 250, 40);  getBtnSubmit().setForeground(Color.BLUE);    Map<TextAttribute, Object> attributesBtnSubmit = new HashMap<>();  attributesBtnSubmit.put(TextAttribute.WEIGHT, TextAttribute.WEIGHT_BOLD);  getBtnSubmit().setFont(Font.getFont(attributesBtnSubmit));
+  getFrame().getContentPane().add(getBtnSubmit());  getBtnSubmit().addActionListener(new ActionListener()   {   public void actionPerformed(ActionEvent arg0) {    if (getComboCountry().getSelectedItem().equals(" -- Select -- ")      || getTextDRN().getText().equals("")      || getTextAmount().getText().equals("")      || getTextCurrency().getText().equals("")      || getTextSettlementAccount().getText().equals("")      || getTextSettlementCollectionAccount().getText().equals(""))    {     JOptionPane.showMessageDialog(null,       "Please fill All fields for proceeding further :)");    }     else    {     getFrame().setBounds(100, 100, 700, 475);     sp.setVisible(true);     separator.setVisible(true);     getTextOutput().setVisible(true);     getTextOutput().setText(getTextOutput().getText() + formatMessage());    }   }  });
+  setBtnClear(new JButton("Reset All"));  getBtnClear().setBounds(50, 12 * getFieldY(), 120, 40);  getFrame().getContentPane().add(getBtnClear());  getBtnClear().addActionListener(new ActionListener() {   public void actionPerformed(ActionEvent e)    {    getTextAmount().setText("");    getTextCurrency().setText("");    getTextDRN().setText("DRN");    getTextSettlementAccount().setText("");    getTextSettlementCollectionAccount().setText("");
+    getComboCountry().setSelectedIndex(0);    getComboDay().setSelectedIndex(Integer.parseInt(new SimpleDateFormat("dd").      format(Calendar.getInstance().getTime())) - 1);    getComboMonth().setSelectedIndex(Integer.parseInt(new SimpleDateFormat("MM").      format(Calendar.getInstance().getTime())) - 1);    getComboYear().setSelectedIndex(Integer.parseInt(new SimpleDateFormat("yy").      format(Calendar.getInstance().getTime())) - 16);
+    getTextOutput().setText("");    getFrame().setBounds(100, 100, 350, 475);    sp.setVisible(false);    separator.setVisible(false);   }  });
+  setBtnExit(new JButton("Exit!"));  getBtnExit().setBounds(180, 12 * getFieldY(), 120, 40);  getBtnExit().setForeground(Color.red);
+  getFrame().getContentPane().add(getBtnExit());  getBtnExit().addActionListener(new ActionListener()   {   public void actionPerformed(ActionEvent e)    {    // System.out.println("You just clicked on LEAVE");
+    System.exit(0);   }  });
+ }
+ private String formatMessage()  {  String str = new String();  str += "910";  str += "\n";
+  str += "MIDLGB22XXX";  str += "\n";
+  str += getArraycountrymapping()[getComboCountry().getSelectedIndex()-1];  str += "\n";
+  str += ":20:"+new SimpleDateFormat("yyMMddHHmmss").format(Calendar.getInstance().getTime())+"RAUN";  str += "\n";
+  str += ":21:"+textDRN.getText();  str += "\n";
+  str += ":25:"+textSettlementAccount.getText();  str += "\n";
+  String month = getComboMonth().getSelectedItem().toString();  String day = getComboDay().getSelectedItem().toString();
+  str += ":32A:"    + getComboYear().getSelectedItem().toString().substring(2)    + ("00" + month).substring(month.length())    + ("00" + day).substring(day.length())    + textCurrency.getText()    +formattedAmount(textAmount.getText());  str += "\n";
+  str += ":50K:"    +textSettlementCollectionAccount.getText()    +"\n"+    textSettlementCollectionAccount.getText();  str += "\n";
+  str += ":72:/BNF/"+textDRN.getText();  str += "\n";
+  str += "####";  str += "\n";  return str; }
+ private String formattedAmount(String str) {  for(int i = str.length() - 1; i >= 0; i--)   if(str.charAt(i) == '.')    str = str.substring(0, i)+ "," +str.substring(i+1);  return str; }
+ private void init()  {  // System.out.println("Creating User Window");  setFrame(new JFrame());  getFrame().setTitle("MT910 Generator");  getFrame().setBounds(100, 100, 350, 475);  getFrame().setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);  getFrame().getContentPane().setLayout(null);  getFrame().setResizable(false);  getFrame().setVisible(true);  try   {   UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");  }  catch (ClassNotFoundException | InstantiationException    | IllegalAccessException | UnsupportedLookAndFeelException e) {   e.printStackTrace();  } 
+  //     JTextField[] jTextFieldArray = new JTextField[10];  //     frame.setFocusTraversalKeysEnabled(true);  //  frame.setFocusTraversalPolicy(new CustomFocusTraversalPolicy(Arrays.asList(jTextFieldArray)));  //   getFrame().setUndecorated(true);  // getFrame().getContentPane().setBackground(new  // Color(1.0f,1.0f,1.0f,0.5f)); }
+ public static JFrame getFrame() {  return frame; }
+ public static void setFrame(JFrame frame) {  MTMessageGenerator.frame = frame; }
+ public JLabel getLabelCountry() {  return labelCountry; }
+ public void setLabelCountry(JLabel labelTransactionID) {  this.labelCountry = labelTransactionID; }
+ public JButton getBtnSubmit() {  return btnSubmit; }
+ public void setBtnSubmit(JButton btnSubmit) {  this.btnSubmit = btnSubmit; }
+ public JButton getBtnClear() {  return btnClear; }
+ public void setBtnClear(JButton btnClear) {  this.btnClear = btnClear; }
+ public JButton getBtnExit() {  return btnExit; }
+ public void setBtnExit(JButton btnExit) {  this.btnExit = btnExit; }
+ public static JComboBox<String> getComboCountry() {  return comboCountry; }
+ public static void setComboCountry(JComboBox<String> comboCountry) {  MTMessageGenerator.comboCountry = comboCountry; }
+ public JLabel getLabelDRN() {  return labelDRN; }
+ public void setLabelDRN(JLabel labelDRN) {  this.labelDRN = labelDRN; }
+ public JLabel getLabelCurrency() {  return labelCurrency; }
+ public void setLabelCurrency(JLabel labelCurrency) {  this.labelCurrency = labelCurrency; }
+ public JLabel getLabelAmount() {  return labelAmount; }
+ public void setLabelAmount(JLabel labelAmount) {  this.labelAmount = labelAmount; }
+ public JLabel getLabelSettlementAccount() {  return labelSettlementAccount; }
+ public void setLabelSettlementAccount(JLabel labelSettlementAccount) {  this.labelSettlementAccount = labelSettlementAccount; }
+ public JLabel getLabelSettlementCollectionAccount() {  return labelSettlementCollectionAccount; }
+ public void setLabelSettlementCollectionAccount(   JLabel labelSettlementCollectionAccount) {  this.labelSettlementCollectionAccount = labelSettlementCollectionAccount; }
+ public static JTextField getTextCurrency() {  return textCurrency; }
+ public static void setTextCurrency(JTextField textCurrency) {  MTMessageGenerator.textCurrency = textCurrency; }
+ public static JTextField getTextAmount() {  return textAmount; }
+ public static void setTextAmount(JTextField textAmount) {  MTMessageGenerator.textAmount = textAmount; }
+ public static JTextField getTextSettlementAccount() {  return textSettlementAccount; }
+ public static void setTextSettlementAccount(JTextField textSettlementAccount) {  MTMessageGenerator.textSettlementAccount = textSettlementAccount; }
+ public static JTextField getTextSettlementCollectionAccount() {  return textSettlementCollectionAccount; }
+ public static void setTextSettlementCollectionAccount(   JTextField textSettlementCollectionAccount) {  MTMessageGenerator.textSettlementCollectionAccount = textSettlementCollectionAccount; }
+ public static JTextField getTextDRN() {  return textDRN; }
+ public static void setTextDRN(JTextField textDRN) {  MTMessageGenerator.textDRN = textDRN; }
+ public static JTextArea getTextOutput() {  return textOutput; }
+ public static void setTextOutput(JTextArea textOutput) {  MTMessageGenerator.textOutput = textOutput; }
+ public JLabel getLabelYear() {  return labelYear; }
+ public void setLabelYear(JLabel labelYear) {  this.labelYear = labelYear; }
+ public JLabel getLabelMonth() {  return labelMonth; }
+ public void setLabelMonth(JLabel labelMonth) {  this.labelMonth = labelMonth; }
+ public JLabel getLabelDay() {  return labelDay; }
+ public void setLabelDay(JLabel labelDay) {  this.labelDay = labelDay; }
+ public static JComboBox<String> getComboYear() {  return comboYear; }
+ public static void setComboYear(JComboBox<String> comboYear) {  MTMessageGenerator.comboYear = comboYear; }
+ public static JComboBox<String> getComboMonth() {  return comboMonth; }
+ public static void setComboMonth(JComboBox<String> comboMonth) {  MTMessageGenerator.comboMonth = comboMonth; }
+ public static JComboBox<String> getComboDay() {  return comboDay; }
+ public static void setComboDay(JComboBox<String> comboDay) {  MTMessageGenerator.comboDay = comboDay; }
+ public static String[] getArraycountry() {  return arrayCountry; }
+ public static String[] getArraycountrymapping() {  return arrayCountryMapping; }
+ public static int getLabelX() {  return labelX; }
+ public static void setLabelX(int labelX) {  MTMessageGenerator.labelX = labelX; }
+ public static int getLabelY() {  return labelY; }
+ public static void setLabelY(int labelY) {  MTMessageGenerator.labelY = labelY; }
+ public static int getFieldX() {  return fieldX; }
+ public static void setFieldX(int fieldX) {  MTMessageGenerator.fieldX = fieldX; }
+ public static int getFieldY() {  return fieldY; }
+ public static void setFieldY(int fieldY) {  MTMessageGenerator.fieldY = fieldY; }}
