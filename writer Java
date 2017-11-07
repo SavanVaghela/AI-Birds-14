@@ -1,0 +1,45 @@
+import java.awt.AWTException;import java.awt.Rectangle;import java.awt.Robot;import java.awt.Toolkit;import java.awt.event.KeyEvent;import java.awt.image.BufferedImage;import java.io.File;import java.io.IOException;
+import javax.imageio.ImageIO;
+public class Writer{  static Robot bot;
+ public Writer() throws AWTException  {  bot = new Robot(); } public static void writeRobot(String str) throws InterruptedException, AWTException {  bot = new Robot();  for(int i = 0; i < str.length(); i++)  {   if(str.charAt(i) >= 'A' && str.charAt(i) <='Z')   {    bot    .keyPress(KeyEvent.VK_SHIFT);    bot.keyPress((int) str.charAt(i));    Thread.sleep(10);    bot.keyRelease(KeyEvent.VK_SHIFT);    bot.keyRelease((int) str.charAt(i));   }   else if(str.charAt(i) >= 'a' && str.charAt(i) <='z')   {
+    bot.keyPress((int) str.charAt(i) - 'a' + 'A');    Thread.sleep(10);    bot.keyRelease((int) str.charAt(i) - 'a' + 'A');
+   }   else if(str.charAt(i) >= '0' && str.charAt(i) <='9')   {    bot.keyPress((int) str.charAt(i));    Thread.sleep(10);    bot.keyRelease((int) str.charAt(i));   }   else if(str.charAt(i) == '_')   {    bot.keyPress(KeyEvent.VK_SHIFT);    bot.keyPress(KeyEvent.VK_MINUS);    Thread.sleep(10);    bot.keyRelease(KeyEvent.VK_SHIFT);    bot.keyRelease(KeyEvent.VK_MINUS);   }   else if(str.charAt(i) == '/')   {    bot.keyPress(KeyEvent.VK_SLASH);    Thread.sleep(10);    bot.keyRelease(KeyEvent.VK_SLASH);    }   else if(str.charAt(i) == '@')   {
+    bot.keyPress(KeyEvent.VK_SHIFT);    bot.keyPress(KeyEvent.VK_2);    Thread.sleep(10);    bot.keyRelease(KeyEvent.VK_SHIFT);    bot.keyRelease(KeyEvent.VK_2);
+   }   else if(str.charAt(i) == '.')   {    bot.keyPress(KeyEvent.VK_PERIOD);    Thread.sleep(10);    bot.keyRelease(KeyEvent.VK_PERIOD);
+   }   else if(str.charAt(i) == ' ')   {    bot.keyPress(KeyEvent.VK_SPACE);    Thread.sleep(10);    bot.keyRelease(KeyEvent.VK_SPACE);   }   else if(str.charAt(i) == '-')   {    bot.keyPress(KeyEvent.VK_MINUS);    Thread.sleep(10);    bot.keyRelease(KeyEvent.VK_MINUS);   }   else if(str.charAt(i) == '(')   {    bot.keyPress(KeyEvent.VK_SHIFT);    bot.keyPress(KeyEvent.VK_9);    Thread.sleep(10);    bot.keyRelease(KeyEvent.VK_SHIFT);    bot.keyRelease(KeyEvent.VK_9);   }   else if(str.charAt(i) == ')')   {    bot.keyPress(KeyEvent.VK_SHIFT);    bot.keyPress(KeyEvent.VK_0);    Thread.sleep(10);    bot.keyRelease(KeyEvent.VK_SHIFT);    bot.keyRelease(KeyEvent.VK_0);   }   else if(str.charAt(i) == '\'')   {    bot.keyPress(KeyEvent.VK_QUOTE);    Thread.sleep(10);    bot.keyRelease(KeyEvent.VK_QUOTE);   }  } }
+ public static void pressTab() throws InterruptedException, AWTException  {  bot = new Robot();
+  bot.keyPress(KeyEvent.VK_TAB);  Thread.sleep(10);  bot.keyRelease(KeyEvent.VK_TAB);  Thread.sleep(20); }
+ public static void pressEnter() throws InterruptedException, AWTException  {  bot = new Robot();
+  bot.keyPress(KeyEvent.VK_ENTER);  Thread.sleep(10);  bot.keyRelease(KeyEvent.VK_ENTER);  Thread.sleep(10); }  public static void pressHome() throws InterruptedException, AWTException  {  bot = new Robot();
+  bot.keyPress(KeyEvent.VK_HOME);  Thread.sleep(10);  bot.keyRelease(KeyEvent.VK_HOME);  Thread.sleep(10); }
+ public static void pressCtrlFn(String str) throws InterruptedException, AWTException  {  bot = new Robot();
+  int fnKey = 111 + Integer.parseInt(str.substring(1));  bot.keyPress(KeyEvent.VK_CONTROL);  Thread.sleep(10);  bot.keyPress(fnKey);  Thread.sleep(10);  bot.keyRelease(fnKey);  Thread.sleep(10);  bot.keyRelease(KeyEvent.VK_CONTROL);
+ }  public static void pressFunctionKey(String str) throws InterruptedException, AWTException  {  bot = new Robot();
+  int fnKey = 111 + Integer.parseInt(str.substring(1));
+  bot.keyPress(fnKey);  Thread.sleep(10);  bot.keyRelease(fnKey);  Thread.sleep(10);
+ }
+ public static void takeScreenshot(String currentRecordNumber) throws AWTException, IOException  {  Rectangle screenRect = new Rectangle(Toolkit.getDefaultToolkit().getScreenSize());  BufferedImage capture = new Robot().createScreenCapture(screenRect);
+  String directoryName = "Screens";  File file = new File(directoryName);  if (!file.exists())  {   file.mkdir();  }  //  File temp = File.createTempFile("ip"+currentRecordNumber, ".bmp");  ImageIO.write(capture, "jpg", new File(directoryName + "/file" + currentRecordNumber + ".jpg"));
+  //  ImageIO.write(capture, "bmp", new File("C:\\images\\input" + currentRecordNumber + ".bmp")); }
+ public static void pressEscape() throws AWTException, InterruptedException  {  bot = new Robot();
+  bot.keyPress(KeyEvent.VK_ESCAPE);  Thread.sleep(10);  bot.keyRelease(KeyEvent.VK_ESCAPE);  Thread.sleep(10); } public static void pressAltTab() throws AWTException, InterruptedException  {  bot = new Robot();
+  bot.keyPress(KeyEvent.VK_ALT);  Thread.sleep(10);  pressTab();  Thread.sleep(100);  bot.keyRelease(KeyEvent.VK_ALT);  Thread.sleep(10); }
+ public static void releaseAllKeys() throws AWTException, InterruptedException  {  bot = new Robot();
+  int lim = (int) Math.pow(2, 16);  for(int i = 0; i < lim; i++)  {   bot.keyRelease(i);   Thread.sleep(5);  }  Thread.sleep(10);  bot.keyRelease(KeyEvent.VK_SHIFT); }
+ public static void copySelected() throws AWTException, InterruptedException  {  bot = new Robot();
+  bot.keyPress(KeyEvent.VK_CONTROL);  Thread.sleep(10);  bot.keyPress(KeyEvent.VK_C);  Thread.sleep(10);
+  bot.keyRelease(KeyEvent.VK_C);  Thread.sleep(10);  bot.keyRelease(KeyEvent.VK_CONTROL);  Thread.sleep(10); }
+ public static boolean isCapsLockOn()  {  return Toolkit.getDefaultToolkit().getLockingKeyState(KeyEvent.VK_CAPS_LOCK); }
+ public static void pressCapsLock() throws AWTException, InterruptedException  {  bot = new Robot();
+  Toolkit.getDefaultToolkit().setLockingKeyState(KeyEvent.VK_CAPS_LOCK, !isCapsLockOn());  /*bot.keyPress(KeyEvent.VK_CAPS_LOCK);  Thread.sleep(10);  bot.keyRelease(KeyEvent.VK_CAPS_LOCK);  Thread.sleep(10);*/ } public static void pressAeroKey(String dir) throws AWTException, InterruptedException  {  bot = new Robot();
+  if(dir.toUpperCase().equals("UP"))   bot.keyPress(KeyEvent.VK_UP);  else if(dir.toUpperCase().equals("DOWN"))   bot.keyPress(KeyEvent.VK_DOWN);  else if(dir.toUpperCase().equals("LEFT"))   bot.keyPress(KeyEvent.VK_LEFT);  else if(dir.toUpperCase().equals("RIGHT"))   bot.keyPress(KeyEvent.VK_RIGHT);
+  Thread.sleep(10);
+  if(dir.toUpperCase().equals("UP"))   bot.keyRelease(KeyEvent.VK_UP);  else if(dir.toUpperCase().equals("DOWN"))   bot.keyRelease(KeyEvent.VK_DOWN);  else if(dir.toUpperCase().equals("LEFT"))   bot.keyRelease(KeyEvent.VK_LEFT);  else if(dir.toUpperCase().equals("RIGHT"))   bot.keyRelease(KeyEvent.VK_RIGHT);
+  Thread.sleep(10);
+ }
+ public static void pressShiftTab(int n) throws AWTException, InterruptedException  {  bot = new Robot();
+  bot.keyPress(KeyEvent.VK_SHIFT);  Thread.sleep(10);  for(int i = 0; i < n; i++)  {    pressTab();   Thread.sleep(10);  }  bot.keyRelease(KeyEvent.VK_SHIFT);  Thread.sleep(10);   }  public static void pressShiftAero(String dir, int n) throws AWTException, InterruptedException  {  bot = new Robot();
+  bot.keyPress(KeyEvent.VK_SHIFT);  Thread.sleep(10);  for(int i = 0; i < n; i++)  {    pressAeroKey(dir);  }  bot.keyRelease(KeyEvent.VK_SHIFT);  Thread.sleep(10);   }  public static void pasteSelected() throws AWTException, InterruptedException  {  bot = new Robot();
+  bot.keyPress(KeyEvent.VK_CONTROL);  Thread.sleep(10);  bot.keyPress(KeyEvent.VK_V);  Thread.sleep(10);
+  bot.keyRelease(KeyEvent.VK_V);  Thread.sleep(10);  bot.keyRelease(KeyEvent.VK_CONTROL);  Thread.sleep(10); }  public static void pressCtrlDel() throws AWTException, InterruptedException  {  bot = new Robot();
+  bot.keyPress(KeyEvent.VK_CONTROL);  Thread.sleep(10);  bot.keyPress(KeyEvent.VK_DELETE);  Thread.sleep(10);  bot.keyRelease(KeyEvent.VK_DELETE);  Thread.sleep(10);  bot.keyRelease(KeyEvent.VK_CONTROL);  Thread.sleep(10); } }
